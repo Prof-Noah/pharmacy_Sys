@@ -39,6 +39,9 @@ public class MedicineController {
         setupAddButton();
 
         setupEditButton();
+
+        //edit_am
+        setupSalesButton();
     }
 
     // =========================================================
@@ -268,6 +271,25 @@ public class MedicineController {
                 .setOnAction(event -> {
 
                     editSelectedMedicine();
+                });
+    }
+
+    // =========================================================
+    // SALES/edit_am
+    // =========================================================
+
+    private void setupSalesButton() {
+
+        view.getSalesButton()
+                .setOnAction(event -> {
+
+                    SalesController salesController =
+                            new SalesController(
+                                    allMedicines,
+                                    service
+                            );
+
+                    salesController.show();
                 });
     }
 

@@ -36,6 +36,9 @@ public class MedicineView {
 
     private Button editButton;
 
+    // Public_edit_am
+    private Button salesButton;
+
 
     public MedicineView() {
 
@@ -139,7 +142,7 @@ public class MedicineView {
         Button medicinesButton =
                 createMenuButton("💊  Medicines");
 
-        Button salesButton =
+        salesButton =
                 createMenuButton("🛒  Sales");
 
         Button reportsButton =
@@ -621,5 +624,14 @@ public class MedicineView {
     public Button getAddButton() {
 
         return addButton;
+    }
+
+    // =========================================================
+    // GET SALES BUTTON/edit_am
+    // =========================================================
+
+    public Button getSalesButton() {
+
+        return salesButton;
     }
 }

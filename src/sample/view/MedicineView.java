@@ -46,6 +46,8 @@ public class MedicineView {
 
     private int lowStockThreshold = 10;
 
+    private Button salesButton;
+
 
     public MedicineView() {
 
@@ -149,7 +151,7 @@ public class MedicineView {
         Button medicinesButton =
                 createMenuButton("💊  Medicines");
 
-        Button salesButton =
+        salesButton =
                 createMenuButton("🛒  Sales");
 
         Button reportsButton =
@@ -653,5 +655,15 @@ public class MedicineView {
         userLabel.setText(username + "  ● Online");
         this.lowStockThreshold = lowStockThreshold;
         medicineTable.refresh();
+    }
+
+    // =========================================================
+    // GET SALES BUTTON
+    // =========================================================
+
+    public Button getSalesButton() {
+
+        return salesButton;
+
     }
 }

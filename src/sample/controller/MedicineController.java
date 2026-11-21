@@ -3,8 +3,8 @@ package sample.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
-
 import javafx.scene.input.KeyCode;
+
 import sample.model.Medicine;
 import sample.service.MedicineService;
 import sample.view.AddMedicineView;
@@ -39,13 +39,9 @@ public class MedicineController {
         view.getMedicineTable()
                 .setItems(allMedicines);
 
-
-
-        setupMouseEvents();
-
-        setupKeyboardEvents();
-
         setupSearch();
+
+        setupSearchShortcuts();
 
         setupAddButton();
 
@@ -54,11 +50,30 @@ public class MedicineController {
         setupLogoutButton();
 
         setupSettingsButton();
+
+        setupSalesButton();
     }
 
     // =========================================================
     // SEARCH
     // =========================================================
+
+    private void setupSearchShortcuts() {
+
+        view.getSearchField()
+                .setOnKeyPressed(event -> {
+                    if (event.getCode() == KeyCode.ESCAPE) {
+                        view.getSearchField().clear();
+                    }
+                });
+
+        view.getSearchField()
+                .setOnMouseClicked(event -> {
+                    if (event.getClickCount() == 2) {
+                        view.getSearchField().clear();
+                    }
+                });
+    }
 
     private void setupSearch() {
 
@@ -74,12 +89,6 @@ public class MedicineController {
                             );
                         }
                 );
-
-
-
-
-
-
     }
 
     private void filterMedicines(
@@ -322,6 +331,25 @@ public class MedicineController {
         this.onSettings = onSettings;
     }
 
+    // =========================================================
+    // SALES
+    // =========================================================
+
+    private void setupSalesButton() {
+
+        view.getSalesButton()
+                .setOnAction(event -> {
+
+                    SalesController salesController =
+                            new SalesController(
+                                    allMedicines,
+                                    service
+                            );
+
+                    salesController.show();
+                });
+    }
+
     private void editSelectedMedicine() {
 
         Medicine selectedMedicine =
@@ -482,91 +510,6 @@ public class MedicineController {
         alert.setContentText(message);
 
         alert.showAndWait();
-    }
-
-    // =========================================================
-// MOUSE EVENTS
-// =========================================================
-    private void setupMouseEvents() {
-
-        // 1. Mouse Clicked
-        view.getSearchField().setOnMouseClicked(event -> {
-            System.out.println("Mouse Clicked");
-        });
-
-        // 2. Mouse Pressed
-        view.getSearchField().setOnMousePressed(event -> {
-            System.out.println("Mouse Pressed");
-        });
-
-        // 3. Mouse Released
-        view.getSearchField().setOnMouseReleased(event -> {
-            System.out.println("Mouse Released");
-        });
-
-        // 4. Mouse Entered
-        view.getSearchField().setOnMouseEntered(event -> {
-            System.out.println("Mouse Entered Search Field");
-        });
-
-        // 5. Mouse Exited
-        view.getSearchField().setOnMouseExited(event -> {
-            System.out.println("Mouse Exited Search Field");
-        });
-
-        // 6. Mouse Moved
-        view.getSearchField().setOnMouseMoved(event -> {
-            System.out.println("Mouse Moved");
-        });
-
-        // 7. Mouse Dragged
-        view.getSearchField().setOnMouseDragged(event -> {
-            System.out.println("Mouse Dragged");
-        });
-
-
-        view.getSearchField()
-                .setOnMouseClicked(event -> {
-
-                    if (event.getClickCount() == 2) {
-                        view.getSearchField().clear();
-                    }
-                });
-    }
-
-    // =========================================================
-// KEYBOARD EVENTS
-// =========================================================
-    private void setupKeyboardEvents() {
-
-        // 1. Key Pressed
-        view.getSearchField().setOnKeyPressed(event -> {
-
-            System.out.println(
-                    "Key Pressed: " + event.getCode()
-            );
-
-            // Press ESC to clear search
-            if (event.getCode() == KeyCode.ESCAPE) {
-                view.getSearchField().clear();
-            }
-        });
-
-        // 2. Key Released
-        view.getSearchField().setOnKeyReleased(event -> {
-
-            System.out.println(
-                    "Key Released: " + event.getCode()
-            );
-        });
-
-        // 3. Key Typed
-        view.getSearchField().setOnKeyTyped(event -> {
-
-            System.out.println(
-                    "Key Typed: " + event.getCharacter()
-            );
-        });
     }
 
     // =========================================================

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="sample.login.SettingsController"
+      alignment="CENTER_LEFT"
+      spacing="11"
+      styleClass="settings-root">
+    <padding>
+        <Insets top="28" right="38" bottom="28" left="38" />
+    </padding>
+
+    <Label text="Account Settings" styleClass="form-title" />
+    <Label text="Update your pharmacy and account details. Enter your current password to save changes." wrapText="true" styleClass="form-subtitle" />
+
+    <VBox spacing="6" styleClass="field-group">
+        <Label text="Pharmacy name" styleClass="field-label" />
+        <TextField fx:id="pharmacyNameField" styleClass="login-input" />
+    </VBox>
+
+    <VBox spacing="6" styleClass="field-group">
+        <Label text="Low-stock warning threshold (units)" styleClass="field-label" />
+        <TextField fx:id="lowStockThresholdField" promptText="Default: 10" styleClass="login-input" />
+    </VBox>
+
+    <VBox spacing="6" styleClass="field-group">
+        <Label text="Username" styleClass="field-label" />
+        <TextField fx:id="usernameField" styleClass="login-input" />
+    </VBox>
+
+    <VBox spacing="6" styleClass="field-group">
+        <Label text="Current password (required to save)" styleClass="field-label" />
+        <PasswordField fx:id="currentPasswordField" promptText="Enter current password" styleClass="login-input" />
+    </VBox>
+
+    <VBox spacing="6" styleClass="field-group">
+        <Label text="New password (optional)" styleClass="field-label" />
+        <PasswordField fx:id="newPasswordField" promptText="Leave empty to keep current password" styleClass="login-input" />
+    </VBox>
+
+    <VBox spacing="6" styleClass="field-group">
+        <Label text="Confirm new password" styleClass="field-label" />
+        <PasswordField fx:id="confirmPasswordField" promptText="Repeat the new password" onAction="#handleSave" styleClass="login-input" />
+    </VBox>
+
+    <Label fx:id="messageLabel" text=" " wrapText="true" styleClass="settings-message" />
+    <Button text="Save changes" onAction="#handleSave" maxWidth="Infinity" styleClass="login-button" />
+
+    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="settings-actions">
+        <Button text="Delete account" onAction="#handleDelete" styleClass="danger-button" />
+        <Button text="Cancel" onAction="#handleCancel" styleClass="secondary-button" />
+    </HBox>
+</VBox>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="sample.login.LoginController"
+      styleClass="login-root">
+    <VBox alignment="CENTER_LEFT" spacing="18" styleClass="brand-panel" HBox.hgrow="ALWAYS">
+        <Label text="FCI" styleClass="brand-mark" />
+        <Label text="PHARMA CARE" styleClass="brand-title" />
+        <Label text="Pharmacy Management System" styleClass="brand-subtitle" />
+        <Label text="Manage your pharmacy with confidence." styleClass="brand-caption" wrapText="true" />
+    </VBox>
+
+    <VBox alignment="CENTER_LEFT" spacing="16" styleClass="form-panel" HBox.hgrow="ALWAYS">
+        <padding>
+            <Insets top="56" right="64" bottom="56" left="64" />
+        </padding>
+        <Label text="Welcome back" styleClass="form-title" />
+        <Label text="Sign in to continue to your dashboard." styleClass="form-subtitle" wrapText="true" />
+
+        <VBox spacing="7" styleClass="field-group">
+            <Label text="Username" styleClass="field-label" />
+            <TextField fx:id="usernameField" promptText="Enter your username" styleClass="login-input" />
+        </VBox>
+
+        <VBox spacing="7" styleClass="field-group">
+            <Label text="Password" styleClass="field-label" />
+            <PasswordField fx:id="passwordField" promptText="Enter your password" onAction="#handleLogin" styleClass="login-input" />
+        </VBox>
+
+        <Label fx:id="messageLabel" text=" " wrapText="true" styleClass="login-message" />
+        <Button text="Sign in" onAction="#handleLogin" maxWidth="Infinity" styleClass="login-button" />
+        <HBox alignment="CENTER" spacing="5" styleClass="register-prompt">
+            <Label text="Don't have an account?" styleClass="form-note" />
+            <Button text="Create account" onAction="#handleRegister" styleClass="link-button" />
+        </HBox>
+    </VBox>
+</HBox>

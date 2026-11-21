@@ -36,6 +36,16 @@ public class MedicineView {
 
     private Button editButton;
 
+    private Button logoutButton;
+
+    private Button settingsButton;
+
+    private Label pharmacyNameLabel;
+
+    private Label userLabel;
+
+    private int lowStockThreshold = 10;
+
 
     public MedicineView() {
 
@@ -63,7 +73,7 @@ public class MedicineView {
 
     private HBox createHeader() {
 
-        Label logo =
+        pharmacyNameLabel =
                 new Label("FCI PHARMA CARE");
 
         Label subtitle =
@@ -73,12 +83,12 @@ public class MedicineView {
                 new VBox(3);
 
         branding.getChildren().addAll(
-                logo,
+                pharmacyNameLabel,
                 subtitle
         );
 
-        Label user =
-                new Label("Mohammed  ● Online");
+        userLabel =
+                new Label("User  ● Online");
 
         HBox header =
                 new HBox();
@@ -100,7 +110,7 @@ public class MedicineView {
 
         header.getChildren().addAll(
                 branding,
-                user
+                userLabel
         );
 
         HBox.setHgrow(
@@ -162,7 +172,7 @@ public class MedicineView {
         editButton =
                 createMenuButton("✏  Edit Medicine");
 
-        Button settingsButton =
+        settingsButton =
                 createMenuButton("⚙  Settings");
 
         // -------------------------
@@ -181,7 +191,7 @@ public class MedicineView {
         // Logout
         // -------------------------
 
-        Button logoutButton =
+        logoutButton =
                 createMenuButton("🚪  Logout");
 
         // -------------------------
@@ -522,7 +532,7 @@ public class MedicineView {
                                                 "● Out of Stock"
                                         );
 
-                                    } else if (quantity <= 10) {
+                                    } else if (quantity <= lowStockThreshold) {
 
                                         setText(
                                                 "● Low Stock"
@@ -621,5 +631,27 @@ public class MedicineView {
     public Button getAddButton() {
 
         return addButton;
+    }
+
+    public Button getLogoutButton() {
+
+        return logoutButton;
+    }
+
+    public Button getSettingsButton() {
+
+        return settingsButton;
+    }
+
+    public void setAccountDetails(
+            String pharmacyName,
+            String username,
+            int lowStockThreshold
+    ) {
+
+        pharmacyNameLabel.setText(pharmacyName);
+        userLabel.setText(username + "  ● Online");
+        this.lowStockThreshold = lowStockThreshold;
+        medicineTable.refresh();
     }
 }

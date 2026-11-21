@@ -19,6 +19,10 @@ public class MedicineController {
     private final ObservableList<Medicine>
             allMedicines;
 
+    private Runnable onLogout;
+
+    private Runnable onSettings;
+
     public MedicineController() {
 
         view =
@@ -46,6 +50,10 @@ public class MedicineController {
         setupAddButton();
 
         setupEditButton();
+
+        setupLogoutButton();
+
+        setupSettingsButton();
     }
 
     // =========================================================
@@ -282,6 +290,36 @@ public class MedicineController {
 
                     editSelectedMedicine();
                 });
+    }
+
+    private void setupLogoutButton() {
+
+        view.getLogoutButton()
+                .setOnAction(event -> {
+                    if (onLogout != null) {
+                        onLogout.run();
+                    }
+                });
+    }
+
+    public void setOnLogout(Runnable onLogout) {
+
+        this.onLogout = onLogout;
+    }
+
+    private void setupSettingsButton() {
+
+        view.getSettingsButton()
+                .setOnAction(event -> {
+                    if (onSettings != null) {
+                        onSettings.run();
+                    }
+                });
+    }
+
+    public void setOnSettings(Runnable onSettings) {
+
+        this.onSettings = onSettings;
     }
 
     private void editSelectedMedicine() {

@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyCode;
+import javafx.collections.ListChangeListener;
 
 import sample.model.Medicine;
 import sample.service.MedicineService;
@@ -35,10 +36,13 @@ public class MedicineController {
                 FXCollections.observableArrayList(
                         service.loadMedicines()
                 );
+        allMedicines.addListener(
+                (ListChangeListener<Medicine>) change -> updateStatistics()
+        );
 
         view.getMedicineTable()
                 .setItems(allMedicines);
-
+        updateStatistics();
         setupSearch();
 
         setupSearchShortcuts();
@@ -52,7 +56,13 @@ public class MedicineController {
         setupSettingsButton();
 
         setupSalesButton();
+
+        setupHomeButton();
+
+        setupMedicinesButton();
     }
+
+
 
     // =========================================================
     // SEARCH
@@ -89,6 +99,38 @@ public class MedicineController {
                             );
                         }
                 );
+    }
+
+    private void updateStatistics() {
+
+        int total = allMedicines.size();
+        int available = 0;
+        int outOfStock = 0;
+
+        for (Medicine medicine : allMedicines) {
+            if (medicine.getQuantity() > 0) {
+                available++;
+            } else {
+                outOfStock++;
+            }
+        }
+
+        view.updateStatistics(total, available, outOfStock);
+    }
+
+    private void setupHomeButton() {
+
+        view.getHomeButton()
+                .setOnAction(event -> {
+                    updateStatistics();
+                    view.showHome();
+                });
+    }
+
+    private void setupMedicinesButton() {
+
+        view.getMedicinesButton()
+                .setOnAction(event -> view.showMedicines());
     }
 
     private void filterMedicines(
@@ -155,57 +197,57 @@ public class MedicineController {
     }
 
     private void saveNewMedicine(
-            AddMedicineView addView) {
+                    AddMedicineView addView) {
 
-        try {
+                try {
 
-            String name =
-                    addView.getNameField()
-                            .getText()
-                            .trim();
+                    String name =
+                            addView.getNameField()
+                                    .getText()
+                                    .trim();
 
-            String priceText =
-                    addView.getPriceField()
-                            .getText()
-                            .trim();
+                    String priceText =
+                            addView.getPriceField()
+                                    .getText()
+                                    .trim();
 
-            String quantityText =
-                    addView.getQuantityField()
-                            .getText()
-                            .trim();
+                    String quantityText =
+                            addView.getQuantityField()
+                                    .getText()
+                                    .trim();
 
-            // -------------------------
-            // Validate Name
-            // -------------------------
+                    // -------------------------
+                    // Validate Name
+                    // -------------------------
 
-            if (name.isEmpty()) {
+                    if (name.isEmpty()) {
 
-                showAlert(
-                        "Invalid Data",
-                        "Medicine name cannot be empty."
-                );
+                        showAlert(
+                                "Invalid Data",
+                                "Medicine name cannot be empty."
+                        );
 
-                return;
-            }
+                        return;
+                    }
 
-            // -------------------------
-            // Validate Price
-            // -------------------------
+                    // -------------------------
+                    // Validate Price
+                    // -------------------------
 
-            double price =
-                    Double.parseDouble(
-                            priceText
-                    );
+                    double price =
+                            Double.parseDouble(
+                                    priceText
+                            );
 
-            if (price < 0) {
+                    if (price < 0) {
 
-                showAlert(
-                        "Invalid Data",
-                        "Price cannot be negative."
-                );
+                        showAlert(
+                                "Invalid Data",
+                                "Price cannot be negative."
+                        );
 
-                return;
-            }
+                        return;
+                    }
 
             // -------------------------
             // Validate Quantity
@@ -252,7 +294,6 @@ public class MedicineController {
             allMedicines.add(
                     medicine
             );
-
             // -------------------------
             // Refresh Table
             // -------------------------

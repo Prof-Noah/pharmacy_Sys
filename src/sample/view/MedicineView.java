@@ -27,11 +27,11 @@ public class MedicineView {
     // =========================
     // Controls
     // =========================
-
+    private VBox mainContent;
+    private VBox medicinesContent;
     private TextField searchField;
 
     private TableView<Medicine> medicineTable;
-
     private Button addButton;
 
     private Button editButton;
@@ -48,6 +48,11 @@ public class MedicineView {
 
     private Button salesButton;
 
+    private Button homeButton;
+    private Button medicinesButton;
+    private Label totalMedicinesValue;
+    private Label availableMedicinesValue;
+    private Label outOfStockValue;
 
     public MedicineView() {
 
@@ -66,7 +71,10 @@ public class MedicineView {
 
         root.setLeft(createSidebar());
 
-        root.setCenter(createMainContent());
+        //  root.setCenter(createMainContent());
+        mainContent = createMainContent();
+        medicinesContent = createMedicinesContent();
+        root.setCenter(mainContent);
     }
 
     // =========================================================
@@ -145,10 +153,10 @@ public class MedicineView {
         Label dashboardTitle =
                 new Label("DASHBOARD");
 
-        Button homeButton =
+        homeButton =
                 createMenuButton("🏠  Home");
 
-        Button medicinesButton =
+        medicinesButton =
                 createMenuButton("💊  Medicines");
 
         salesButton =
@@ -263,11 +271,11 @@ public class MedicineView {
         // -------------------------
 
         Label title =
-                new Label("Medicine Search");
+                new Label("Dashboard");
 
         Label description =
                 new Label(
-                        "Search and manage available medicines"
+                        "Overview of your pharmacy inventory"
                 );
 
         VBox titleSection =
@@ -278,6 +286,38 @@ public class MedicineView {
                 description
         );
 
+        HBox statistics =
+                createStatistics();
+
+        content.getChildren().addAll(
+                titleSection,
+                statistics
+        );
+
+        return content;
+    }
+
+
+    private VBox createMedicinesContent() {
+
+        VBox content =
+                new VBox(20);
+
+        content.setPadding(
+                new Insets(30)
+        );
+
+        // -------------------------
+        // Page Title
+        // -------------------------
+
+        Label title =
+                new Label("Medicines Management");
+
+        Label description =
+                new Label(
+                        "Manage your pharmacy medicines"
+                );
         // -------------------------
         // Search
         // -------------------------
@@ -285,23 +325,6 @@ public class MedicineView {
         HBox searchSection =
                 createSearchSection();
 
-        // -------------------------
-        // Statistics
-        // -------------------------
-
-        HBox statistics =
-                createStatistics();
-
-        // -------------------------
-        // Table Title
-        // -------------------------
-
-        Label tableTitle =
-                new Label("Available Medicines");
-
-        // -------------------------
-        // Medicine Table
-        // -------------------------
 
         TableView<Medicine> table =
                 createMedicineTable();
@@ -309,20 +332,12 @@ public class MedicineView {
         // -------------------------
         // Add Components
         // -------------------------
-
         content.getChildren().addAll(
-
-                titleSection,
-
+                title,
                 searchSection,
-
-                statistics,
-
-                tableTitle,
-
+                description,
                 table
         );
-
         // -------------------------
         // Table takes remaining space
         // -------------------------
@@ -385,23 +400,25 @@ public class MedicineView {
 
         HBox cards =
                 new HBox(15);
-
+        totalMedicinesValue = new Label("0");
+        availableMedicinesValue = new Label("0");
+        outOfStockValue = new Label("0");
         VBox totalCard =
                 createCard(
                         "Total Medicines",
-                        "120"
+                        totalMedicinesValue
                 );
 
         VBox availableCard =
                 createCard(
                         "Available",
-                        "108"
+                        availableMedicinesValue
                 );
 
         VBox outOfStockCard =
                 createCard(
                         "Out of Stock",
-                        "12"
+                        outOfStockValue
                 );
 
         cards.getChildren().addAll(
@@ -422,14 +439,11 @@ public class MedicineView {
 
     private VBox createCard(
             String title,
-            String value
+            Label valueLabel
     ) {
 
         Label titleLabel =
                 new Label(title);
-
-        Label valueLabel =
-                new Label(value);
 
         VBox card =
                 new VBox(8);
@@ -657,13 +671,39 @@ public class MedicineView {
         medicineTable.refresh();
     }
 
-    // =========================================================
-    // GET SALES BUTTON
-    // =========================================================
-
     public Button getSalesButton() {
 
         return salesButton;
+    }
 
+    public Button getHomeButton() {
+
+        return homeButton;
+    }
+
+    public void showHome() {
+
+        root.setCenter(mainContent);
+    }
+
+    public void updateStatistics(
+            int total,
+            int available,
+            int outOfStock
+    ) {
+
+        totalMedicinesValue.setText(String.valueOf(total));
+        availableMedicinesValue.setText(String.valueOf(available));
+        outOfStockValue.setText(String.valueOf(outOfStock));
+    }
+
+    public Button getMedicinesButton() {
+
+        return medicinesButton;
+    }
+
+    public void showMedicines() {
+
+        root.setCenter(medicinesContent);
     }
 }

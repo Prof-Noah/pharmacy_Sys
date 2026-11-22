@@ -2,15 +2,18 @@ package sample.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyCode;
 import javafx.collections.ListChangeListener;
 
+import javafx.stage.Stage;
 import sample.model.Medicine;
 import sample.service.MedicineService;
 import sample.view.AddMedicineView;
 import sample.view.EditMedicineView;
 import sample.view.MedicineView;
+import sample.view.ReportsView;
 
 public class MedicineController {
 
@@ -60,6 +63,8 @@ public class MedicineController {
         setupHomeButton();
 
         setupMedicinesButton();
+
+        setupReportsButton();
     }
 
 
@@ -529,6 +534,40 @@ public class MedicineController {
                     "Price must be a number and quantity must be an integer."
             );
         }
+    }
+
+    // Reports
+    private void setupReportsButton() {
+        view.getReportsButton()
+                .setOnAction(event -> {
+
+                    openReports();
+                });
+    }
+    private void openReports() {
+        ReportsView reportsView = new ReportsView();
+        // Display current data
+        reportsView.updateReport(allMedicines);
+        // Listen for changes in medicines
+        ListChangeListener<Medicine> listener = change -> {
+            reportsView.updateReport(allMedicines);
+            System.out.println("Reports Updated Successfully!");
+        };
+        allMedicines.addListener(listener);
+        // Create Reports Window
+        Stage reportsStage = new Stage();
+        Scene scene = new Scene(
+                reportsView.getRoot(),
+                1200,
+                800
+        );
+        reportsStage.setTitle("Pharmacy Reports");
+        reportsStage.setScene(scene);
+        // Remove listener when window closes
+        reportsStage.setOnHidden(event -> {
+            allMedicines.removeListener(listener);
+        });
+        reportsStage.show();
     }
 
     // =========================================================

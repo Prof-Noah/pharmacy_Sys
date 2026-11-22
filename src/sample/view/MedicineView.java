@@ -48,6 +48,8 @@ public class MedicineView {
 
     private Button salesButton;
 
+    private Button reportsButton;
+
     private Button homeButton;
     private Button medicinesButton;
     private Label totalMedicinesValue;
@@ -162,7 +164,7 @@ public class MedicineView {
         salesButton =
                 createMenuButton("🛒  Sales");
 
-        Button reportsButton =
+        reportsButton =
                 createMenuButton("📊  Reports");
 
         // -------------------------
@@ -705,5 +707,9 @@ public class MedicineView {
     public void showMedicines() {
 
         root.setCenter(medicinesContent);
+    }
+
+    public Button getReportsButton() {
+        return reportsButton;
     }
 }

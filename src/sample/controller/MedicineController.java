@@ -3,7 +3,9 @@ package sample.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
-
+import javafx.scene.control.ButtonType;
+import javafx.scene.input.KeyCode;
+import javafx.collections.ListChangeListener;
 import sample.model.Medicine;
 import sample.service.MedicineService;
 import sample.view.AddMedicineView;
@@ -14,7 +16,8 @@ public class MedicineController {
 
     private final MedicineView view;
     private final MedicineService service;
-
+    private Runnable onLogout;
+    private Runnable onSettings;
     private final ObservableList<Medicine>
             allMedicines;
 
@@ -43,6 +46,14 @@ public class MedicineController {
         setupAddButton();
 
         setupEditButton();
+
+        setupDeleteButton();
+
+        setupLogoutButton();
+
+        setupSettingsButton();
+
+        setupSalesButton();
 
         setupHomeButton();
 
@@ -236,29 +247,50 @@ public class MedicineController {
             // Create Medicine
             // -------------------------
 
-            Medicine medicine =
-                    new Medicine(
-                            name,
-                            price,
-                            quantity
-                    );
+                    Medicine existingMedicine = null;
+                    for (Medicine m :allMedicines){
+                        if (m.getName().equalsIgnoreCase(name)){
+                            existingMedicine = m;
+                            break;
+                        }
+                    }
+                    if (existingMedicine != null) {
+                        Medicine updateMedicine=new Medicine(
+                                existingMedicine.getName(),
+                                existingMedicine.getPrice(),
+                                existingMedicine.getQuantity()+quantity
+                        );
+                        service.updateMedicine(
+                                existingMedicine,updateMedicine
+                        );
+                        int index = allMedicines.indexOf(existingMedicine);
+                        allMedicines.set(index,updateMedicine);
+                    }else {
+                        Medicine medicine =
+                                new Medicine(
+                                        name,
+                                        price,
+                                        quantity
+                                );
 
-            // -------------------------
-            // Save to File
-            // -------------------------
+                        // -------------------------
+                        // Save to File
+                        // -------------------------
 
-            service.addMedicine(
-                    medicine
-            );
+                        service.addMedicine(
+                                medicine
+                        );
 
-            // -------------------------
-            // Add to ObservableList
-            // -------------------------
+                        // -------------------------
+                        // Add to ObservableList
+                        // -------------------------
+
 
             allMedicines.add(
                     medicine
             );
             updateStatistics();
+                        }
             // -------------------------
             // Refresh Table
             // -------------------------
@@ -307,6 +339,84 @@ public class MedicineController {
                 });
     }
 
+    private void setupDeleteButton(){
+        view.getDeleteButton().setOnAction(event ->{
+            deleteSelectedMedicine();
+        } );
+    }
+
+    public void deleteSelectedMedicine() {
+        Medicine seletedMedicine = view.getMedicineTable().getSelectionModel().getSelectedItem();
+        if (seletedMedicine == null) {
+            showAlert("No Medicine Selected", "Please select a medicine first");
+            return;
+        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Medicine");
+        alert.setHeaderText("Delete" + seletedMedicine.getName());
+        alert.setContentText("Are you sure you want to delete this medicine ?");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) ;
+            {
+                service.deleteMedicine(seletedMedicine);
+                allMedicines.remove(seletedMedicine);
+               // view.getMedicineTable().setItems(allMedicines);
+                view.getMedicineTable().refresh();
+                showAlert("Success", "Medicine deleted successfully.");
+            }
+        });
+    }
+
+    private void setupLogoutButton() {
+
+        view.getLogoutButton()
+                .setOnAction(event -> {
+                    if (onLogout != null) {
+                        onLogout.run();
+                    }
+                });
+    }
+
+    public void setOnLogout(Runnable onLogout) {
+
+        this.onLogout = onLogout;
+    }
+
+    private void setupSettingsButton() {
+
+        view.getSettingsButton()
+                .setOnAction(event -> {
+                    if (onSettings != null) {
+                        onSettings.run();
+                    }
+                });
+    }
+
+    public void setOnSettings(Runnable onSettings) {
+
+        this.onSettings = onSettings;
+    }
+
+    // =========================================================
+    // SALES
+    // =========================================================
+
+    private void setupSalesButton() {
+
+        view.getSalesButton()
+                .setOnAction(event -> {
+
+                    SalesController salesController =
+                            new SalesController(
+                                    allMedicines,
+                                    service
+                            );
+
+                    salesController.show();
+                });
+    }
+    
     private void editSelectedMedicine() {
 
         Medicine selectedMedicine =

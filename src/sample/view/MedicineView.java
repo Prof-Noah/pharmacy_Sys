@@ -36,6 +36,23 @@ public class MedicineView {
 
     private Button editButton;
 
+
+    private Button deleteButton;
+
+    private Button logoutButton;
+
+    private Button settingsButton;
+
+    private Label pharmacyNameLabel;
+
+    private Label userLabel;
+
+    private int lowStockThreshold = 10;
+
+    private Button salesButton;
+
+    private Button reportsButton;
+    
     private Button homeButton;
     private Button medicinesButton;
     private Label totalMedicinesvalue;
@@ -411,9 +428,13 @@ public class MedicineView {
                 Pos.CENTER_LEFT
         );
 
+        deleteButton = new Button("Delete");
+        deleteButton.setPrefHeight(45);
+
         searchBox.getChildren().addAll(
                 searchField,
-                searchButton
+                searchButton,
+                deleteButton
         );
 
         // TextField takes remaining width
@@ -673,7 +694,9 @@ public class MedicineView {
         return editButton;
     }
 
-
+    public Button getDeleteButton(){
+        return deleteButton;
+    }
     // =========================================================
     // GET EDIT BUTTON
     // =========================================================

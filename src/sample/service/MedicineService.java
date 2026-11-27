@@ -158,4 +158,11 @@ public class MedicineService {
             e.printStackTrace();
         }
     }
+    public void deleteMedicine(Medicine medicine){
+        List<Medicine> medicines = loadMedicines();
+        medicines.removeIf(
+                item -> item.getName().equals(medicine.getName())
+        );
+        saveMedicines(medicines);
+    }
 }
